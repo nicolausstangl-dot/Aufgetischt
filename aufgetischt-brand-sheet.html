@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aufgetischt — Brand Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --leinen:#FBF6EA; --porzellan:#FCF8EF; --weiss:#FFFDF7; --sepia:#221A0F;
+    --wacholder:#1A3A5E; --lorbeer:#1A4A36; --trueffel:#2D2719;
+    --senf:#DA9A2B; --paprika:#C0492A; --salbei:#566031;
+    --muted:#7d7558;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Hanken Grotesk',sans-serif;background:#E7DCC3;color:var(--sepia);line-height:1.62;-webkit-font-smoothing:antialiased;padding:40px 18px 60px}
+  .sheet{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:30px}
+  .mono{font-family:'Spline Sans Mono',monospace}
+  .eyebrow{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:lowercase;color:var(--paprika);margin-bottom:16px}
+  .card{background:var(--leinen);border-radius:18px;border:1px solid rgba(34,26,15,.07);padding:38px 42px}
+  .disp{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1.02}
+  h2.sec{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+  .lead{font-size:16px;color:#3F3622;max-width:64ch}
+  .lead.big{font-size:18px}
+
+  .logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.035em;line-height:1}
+  .per{color:var(--paprika)}
+  .win{border:2px solid;border-bottom:none;border-radius:13px 13px 0 0;background:var(--weiss)}
+  .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid rgba(34,26,15,.12)}
+  .d{width:8px;height:8px;border-radius:50%;background:var(--trueffel);opacity:.3}
+  .addr{flex:1;height:9px;border-radius:5px;background:rgba(34,26,15,.07);margin-left:6px;max-width:170px}
+  .surface{display:flex;align-items:center;gap:15px;padding:22px 24px 28px}
+
+  .mast{background:var(--leinen);border-radius:18px;border:1px solid rgba(34,26,15,.07);padding:46px 42px 44px;text-align:center}
+  .mast .claim{font-family:'Bricolage Grotesque',sans-serif;font-weight:500;font-size:21px;color:var(--sepia);margin-top:26px}
+  .mast .tagline{font-family:'Spline Sans Mono',monospace;font-size:12px;letter-spacing:.07em;color:var(--muted);margin-top:14px}
+
+  .grouplbl{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--muted);margin:26px 0 12px}
+  .grouplbl:first-of-type{margin-top:0}
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:14px}
+  .sw{border-radius:13px;overflow:hidden;border:1px solid rgba(34,26,15,.08)}
+  .sw .chip{height:80px}
+  .sw .meta{padding:11px 13px;background:var(--weiss)}
+  .sw .nm{font-size:14px;font-weight:600}
+  .sw .role{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .sw .hex{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px}
+
+  .typerow{padding:18px 0;border-top:1px solid rgba(34,26,15,.08);display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px}
+  .typerow:first-of-type{border-top:none;padding-top:4px}
+  .typerow .tg{font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--muted);min-width:168px}
+
+  .texgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .tex{border-radius:13px;border:1px solid rgba(34,26,15,.08);overflow:hidden}
+  .tex .swatch{height:90px}
+  .tex .cap{padding:11px 14px;background:var(--weiss);font-size:13px}
+  .tex .cap .mono{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .t-stripe{background-color:var(--leinen);background-image:repeating-linear-gradient(135deg,rgba(86,96,49,.07) 0 1.5px,transparent 1.5px 14px)}
+  .t-karo{background-color:var(--leinen);background-image:repeating-linear-gradient(45deg,rgba(23,58,94,.07) 0 1px,transparent 1px 18px),repeating-linear-gradient(-45deg,rgba(23,58,94,.07) 0 1px,transparent 1px 18px)}
+
+  /* application — full width, stacked */
+  .appstack{display:flex;flex-direction:column;gap:20px}
+  .frame{border-radius:14px;overflow:hidden;border:1px solid rgba(34,26,15,.1)}
+  .frame .band{display:flex;align-items:center;justify-content:space-between;padding:14px 24px}
+  .frame .bwm{display:flex;align-items:center;gap:9px}
+  .frame .bname{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.03em;color:var(--leinen)}
+  .frame .bpill{font-family:'Spline Sans Mono',monospace;font-size:11px;padding:6px 13px;border-radius:999px;background:var(--senf);color:var(--trueffel)}
+  .frame .hero{padding:32px 26px 30px}
+  .frame .hk{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.13em;color:var(--paprika);margin-bottom:13px}
+  .frame .hh{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:30px;line-height:1.03;letter-spacing:-.03em;margin-bottom:12px}
+  .frame .hl{font-size:14.5px;color:#4A4231;margin-bottom:20px;max-width:42ch}
+  .frame .hcta{display:inline-block;font-size:13px;font-weight:600;padding:11px 20px;border-radius:8px;color:var(--leinen)}
+  .frame .props{background:var(--porzellan);border-top:1px solid rgba(34,26,15,.08);padding:20px 26px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .frame .pl{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.07em;margin:0 0 6px}
+  .frame .pt{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:15px;color:var(--sepia);margin:0 0 3px}
+  .frame .px{font-size:12.5px;color:#5C5644;margin:0}
+  .frame .foot{padding:13px 26px;display:flex;align-items:center;justify-content:space-between}
+  .frame .fc{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:14px;color:var(--leinen)}
+  .frame .fu{font-family:'Spline Sans Mono',monospace;font-size:10px}
+
+  .voice{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .voice h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:15px;margin-bottom:12px}
+  .voice .say p{font-size:15px;color:#3F3622;margin-bottom:9px;padding-left:16px;border-left:2px solid var(--salbei)}
+  .reg{font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--salbei);background:rgba(86,96,49,.1);padding:6px 12px;border-radius:8px;display:inline-block;margin-top:8px}
+  .tabu{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .tabu span{font-family:'Spline Sans Mono',monospace;font-size:12.5px;padding:6px 12px;border-radius:8px;background:rgba(192,73,42,.1);color:var(--paprika);text-decoration:line-through}
+  .tabu+p{margin-top:14px;font-size:13.5px;color:var(--muted)}
+
+  .pageftr{text-align:center;font-family:'Spline Sans Mono',monospace;font-size:11px;color:var(--muted);padding-top:8px}
+  @media(max-width:640px){.card,.mast{padding:30px 24px}.voice,.texgrid{grid-template-columns:1fr}.frame .props{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- MASTHEAD -->
+  <div class="mast">
+    <div style="display:flex;justify-content:center">
+      <div class="win" style="border-color:var(--trueffel);width:330px">
+        <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="addr"></span></div>
+        <div class="surface" style="justify-content:center">
+          <span class="logo" style="font-size:36px;color:var(--trueffel)">Aufgetischt<span class="per">.</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="claim">Wir tischen auf. Du bist Gastgeber.</div>
+    <div class="tagline">brand sheet · websites für dein lokal · v1</div>
+  </div>
+
+  <!-- IDEE / MISSION -->
+  <div class="card">
+    <div class="eyebrow">die idee</div>
+    <p class="disp" style="font-size:30px;color:var(--trueffel);max-width:20ch">Der Gastgeber wird einmal selbst bewirtet.</p>
+    <p class="lead big" style="margin-top:22px">Ein Gastronom kümmert sich den ganzen Tag um andere. Um seine Website kümmert sich niemand — dafür ist nie Zeit. Aufgetischt dreht das um: Wir bauen die fertige Seite, du machst sie nur noch live. Reservierung, Tischplan, Karte laufen, während du am Tisch stehst, nicht im Backend.</p>
+    <p class="lead" style="margin-top:16px">Kein Baukasten, kein Technik-Kram, keine leere Vorlage. Done-for-you. Für Gastronomen, nicht für Techniker. Wir verstehen Gastronomie — die Wärme kommt aus Essen und Handwerk, quer über alle Küchen, nicht aus Tracht und Heimat.</p>
+
+    <div style="margin-top:30px;padding:22px 26px;background:var(--trueffel);border-radius:13px">
+      <div class="mono" style="font-size:11px;letter-spacing:.1em;color:var(--senf);margin-bottom:10px">mission in einem satz</div>
+      <p style="font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:21px;line-height:1.25;color:var(--leinen);letter-spacing:-.01em">Jedes unabhängige Lokal verdient einen Auftritt, der so gut ist wie sein Essen — ohne dass der Gastronom eine Zeile Code sieht.</p>
+    </div>
+
+    <p class="lead" style="margin-top:24px"><strong style="font-weight:600">Der Name ist Programm.</strong> „Aufgetischt" steht im Perfekt: die Arbeit ist getan, der Tisch ist gedeckt. Der Punkt am Ende des Logos sagt dasselbe — fertig.</p>
+  </div>
+
+  <!-- LOGO -->
+  <div class="card">
+    <h2 class="sec">Logo</h2>
+    <p class="lead" style="margin-bottom:26px">Die Wortmarke lebt im Browser-Fenster — das Fenster ist die fertige Seite und zugleich der Tisch, auf dem serviert wird. Web und Gastro in einem Bild. Für engere Stellen fällt das Fenster weg und die Wortmarke steht allein; für Icons bleibt die Bildmarke „Auf.".</p>
+
+    <div class="grouplbl">1 · wortbildmarke (primärlogo) — website-header, große auftritte</div>
+    <div style="display:flex;justify-content:center;background:#EFE6D2;border-radius:13px;padding:34px 20px 0;margin-bottom:24px">
+      <div class="win" style="border-color:var(--trueffel);width:330px">
+        <div class="bar"><span class="d"></span><span class="d"></span><span class="d"></span><span class="addr"></span></div>
+        <div class="surface" style="justify-content:center">
+          <span class="logo" style="font-size:36px;color:var(--trueffel)">Aufgetischt<span class="per">.</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grouplbl">↳ wortbildmarke in den drei leittönen</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div style="background:#EFE6D2;border-radius:12px;padding:16px 12px 0;display:flex;justify-content:center">
+        <div class="win" style="border-color:var(--wacholder);width:100%;border-radius:9px 9px 0 0">
+          <div class="bar" style="padding:6px 9px;gap:4px"><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="addr" style="height:6px;max-width:60px"></span></div>
+          <div class="surface" style="padding:12px 10px 15px;justify-content:center">
+            <span class="logo" style="font-size:18px;color:var(--wacholder)">Aufgetischt<span class="per">.</span></span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#EFE6D2;border-radius:12px;padding:16px 12px 0;display:flex;justify-content:center">
+        <div class="win" style="border-color:var(--lorbeer);width:100%;border-radius:9px 9px 0 0">
+          <div class="bar" style="padding:6px 9px;gap:4px"><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="addr" style="height:6px;max-width:60px"></span></div>
+          <div class="surface" style="padding:12px 10px 15px;justify-content:center">
+            <span class="logo" style="font-size:18px;color:var(--lorbeer)">Aufgetischt<span class="per">.</span></span>
+          </div>
+        </div>
+      </div>
+      <div style="background:#EFE6D2;border-radius:12px;padding:16px 12px 0;display:flex;justify-content:center">
+        <div class="win" style="border-color:var(--trueffel);width:100%;border-radius:9px 9px 0 0">
+          <div class="bar" style="padding:6px 9px;gap:4px"><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="d" style="width:5px;height:5px"></span><span class="addr" style="height:6px;max-width:60px"></span></div>
+          <div class="surface" style="padding:12px 10px 15px;justify-content:center">
+            <span class="logo" style="font-size:18px;color:var(--trueffel)">Aufgetischt<span class="per">.</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grouplbl">2 · wortmarke — schmale leisten, briefkopf, fließtext, kleine stellen</div>
+    <div style="display:flex;justify-content:center;align-items:center;background:#EFE6D2;border-radius:12px;padding:34px 20px;margin-bottom:18px">
+      <span class="logo" style="font-size:34px;color:var(--trueffel)">Aufgetischt<span class="per">.</span></span>
+    </div>
+
+    <div class="grouplbl">3 · bildmarke „Auf." — app-icon, favicon, avatar</div>
+    <div style="display:flex;justify-content:center;align-items:flex-end;gap:24px;flex-wrap:wrap;background:#EFE6D2;border-radius:12px;padding:30px 20px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+        <div style="width:84px;height:84px;border-radius:19px;background:var(--trueffel);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px -12px rgba(34,26,15,.55)">
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.04em;line-height:1;color:var(--leinen)">Auf<span class="per">.</span></span>
+        </div>
+        <span class="mono" style="font-size:10px;color:var(--muted)">app-icon · trüffel</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+        <div style="width:84px;height:84px;border-radius:19px;background:var(--leinen);border:1px solid rgba(34,26,15,.12);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px -12px rgba(34,26,15,.3)">
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.04em;line-height:1;color:var(--trueffel)">Auf<span class="per">.</span></span>
+        </div>
+        <span class="mono" style="font-size:10px;color:var(--muted)">app-icon · leinen</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+        <div style="width:36px;height:36px;border-radius:9px;background:var(--trueffel);display:flex;align-items:center;justify-content:center">
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;letter-spacing:-.04em;line-height:1;color:var(--leinen)">Auf</span>
+        </div>
+        <span class="mono" style="font-size:10px;color:var(--muted)">favicon · ohne punkt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FARBWELT -->
+  <div class="card">
+    <h2 class="sec">Farbwelt</h2>
+    <p class="lead" style="margin-bottom:26px">Alle Namen kommen aus der Küche, keiner aus dem Software-Regal. Eine Cremefläche (Leinen) trägt alles. Das farbige Band ist der Akzent, nicht die Hauptfläche — drei Leittöne zur Auswahl, die warmen Töne bleiben konstant.</p>
+
+    <div class="grouplbl">leittöne — band, headline &amp; logo (drei varianten)</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--wacholder)"></div><div class="meta"><div class="nm">Wacholder</div><div class="role">Blau · kühl, maritim</div><div class="hex">#1A3A5E</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--lorbeer)"></div><div class="meta"><div class="nm">Lorbeer</div><div class="role">Grün · frisch, kräutrig</div><div class="hex">#1A4A36</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--trueffel)"></div><div class="meta"><div class="nm">Trüffel</div><div class="role">Dunkelbraun · erdig, ruhig</div><div class="hex">#2D2719</div></div></div>
+    </div>
+
+    <div class="grouplbl">warme akzente — konstant über alle varianten</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--senf)"></div><div class="meta"><div class="nm">Senf</div><div class="role">Buttons im Band, Highlights</div><div class="hex">#DA9A2B</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--paprika)"></div><div class="meta"><div class="nm">Paprika</div><div class="role">Schlusspunkt, kleine CTAs</div><div class="hex">#C0492A</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--salbei)"></div><div class="meta"><div class="nm">Salbei</div><div class="role">sekundäre Akzente, Labels</div><div class="hex">#566031</div></div></div>
+    </div>
+
+    <div class="grouplbl">basis &amp; text</div>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:var(--leinen)"></div><div class="meta"><div class="nm">Leinen</div><div class="role">Hauptfläche</div><div class="hex">#FBF6EA</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--porzellan)"></div><div class="meta"><div class="nm">Porzellan</div><div class="role">Karten, Fenster</div><div class="hex">#FCF8EF</div></div></div>
+      <div class="sw"><div class="chip" style="background:var(--sepia)"></div><div class="meta"><div class="nm">Sepia</div><div class="role">Fließtext</div><div class="hex">#221A0F</div></div></div>
+    </div>
+  </div>
+
+  <!-- SCHRIFT -->
+  <div class="card">
+    <h2 class="sec">Schrift</h2>
+    <p class="lead" style="margin-bottom:24px">Drei Stimmen, drei Rollen. Die serifenlose Display-Schrift bricht bewusst mit dem generischen warmen Serifen-Look. Mono trägt den Handwerks- und Betriebs-Ton.</p>
+    <div class="typerow"><span class="tg">Bricolage Grotesque · display &amp; logo</span><span class="disp" style="font-size:34px;color:var(--trueffel)">Du bist Gastgeber.</span></div>
+    <div class="typerow"><span class="tg">Hanken Grotesk · text &amp; ui</span><span style="font-size:18px">Deine fertige Seite steht — du kümmerst dich um die Gäste.</span></div>
+    <div class="typerow"><span class="tg">Spline Sans Mono · labels &amp; daten</span><span class="mono" style="font-size:15px;letter-spacing:.04em">tischplan · 6 plätze frei · 19:30</span></div>
+  </div>
+
+  <!-- TEXTUREN -->
+  <div class="card">
+    <h2 class="sec">Texturen</h2>
+    <p class="lead" style="margin-bottom:24px">Muster als gewebte Textur unter dem Text, nie als Tapete — immer unter ~7 % Deckkraft, damit die Schrift ruhig bleibt. Zwei Muster, je nach Sektion; viele Flächen bleiben bewusst plain.</p>
+    <div class="texgrid">
+      <div class="tex"><div class="swatch t-stripe"></div><div class="cap">Leinen-Streifen<span class="mono">hero · ruhig, gewebt</span></div></div>
+      <div class="tex"><div class="swatch t-karo"></div><div class="cap">Azulejo-Karo<span class="mono">menü/inhalt · mediterran</span></div></div>
+    </div>
+  </div>
+
+  <!-- ANWENDUNG -->
+  <div class="card">
+    <h2 class="sec">Anwendung</h2>
+    <p class="lead" style="margin-bottom:26px">Eine Marke, drei Felder. Das farbige Band gibt den Ton an (Pre-Header, Logo, Footer), die Cremefläche trägt den Inhalt, der Senf-Button bleibt der konstante Akzent. Wacholder trägt Streifen, Lorbeer Karo, Trüffel bleibt plain.</p>
+    <div class="appstack">
+
+      <div class="frame">
+        <div class="band" style="background:var(--wacholder)">
+          <span class="bwm"><span class="bname">Aufgetischt.</span></span>
+          <span class="bpill">demo ansehen</span>
+        </div>
+        <div class="hero t-stripe">
+          <div class="hk">für gastronomen, nicht für techniker</div>
+          <div class="hh" style="color:var(--wacholder)">Wir tischen auf. Du bist Gastgeber.</div>
+          <div class="hl">Deine fertige Seite steht — Reservierung, Tischplan, Karte. Du kümmerst dich um die Gäste.</div>
+          <span class="hcta" style="background:var(--wacholder)">Zeig mir meine Seite</span>
+        </div>
+        <div class="props">
+          <div><p class="pl" style="color:var(--wacholder)">reservierung</p><p class="pt">Gäste buchen selbst.</p><p class="px">Tag und Nacht, ohne Telefon.</p></div>
+          <div><p class="pl" style="color:var(--wacholder)">tischplan</p><p class="pt">Ein Blick genügt.</p><p class="px">Wer sitzt wo, was ist frei.</p></div>
+          <div><p class="pl" style="color:var(--wacholder)">karte</p><p class="pt">Mehrsprachig, sofort.</p><p class="px">Ändern, fertig, live.</p></div>
+        </div>
+        <div class="foot" style="background:var(--wacholder)"><span class="fc">Aufgetischt. Du bist Gastgeber.</span></div>
+      </div>
+
+      <div class="frame">
+        <div class="band" style="background:var(--lorbeer)">
+          <span class="bwm"><span class="bname">Aufgetischt.</span></span>
+          <span class="bpill">demo ansehen</span>
+        </div>
+        <div class="hero t-karo">
+          <div class="hk">für gastronomen, nicht für techniker</div>
+          <div class="hh" style="color:var(--lorbeer)">Wir tischen auf. Du bist Gastgeber.</div>
+          <div class="hl">Deine fertige Seite steht — Reservierung, Tischplan, Karte. Du kümmerst dich um die Gäste.</div>
+          <span class="hcta" style="background:var(--lorbeer)">Zeig mir meine Seite</span>
+        </div>
+        <div class="props">
+          <div><p class="pl" style="color:var(--lorbeer)">reservierung</p><p class="pt">Gäste buchen selbst.</p><p class="px">Tag und Nacht, ohne Telefon.</p></div>
+          <div><p class="pl" style="color:var(--lorbeer)">tischplan</p><p class="pt">Ein Blick genügt.</p><p class="px">Wer sitzt wo, was ist frei.</p></div>
+          <div><p class="pl" style="color:var(--lorbeer)">karte</p><p class="pt">Mehrsprachig, sofort.</p><p class="px">Ändern, fertig, live.</p></div>
+        </div>
+        <div class="foot" style="background:var(--lorbeer)"><span class="fc">Aufgetischt. Du bist Gastgeber.</span></div>
+      </div>
+
+      <div class="frame">
+        <div class="band" style="background:var(--trueffel)">
+          <span class="bwm"><span class="bname">Aufgetischt.</span></span>
+          <span class="bpill">demo ansehen</span>
+        </div>
+        <div class="hero">
+          <div class="hk">für gastronomen, nicht für techniker</div>
+          <div class="hh" style="color:var(--trueffel)">Wir tischen auf. Du bist Gastgeber.</div>
+          <div class="hl">Deine fertige Seite steht — Reservierung, Tischplan, Karte. Du kümmerst dich um die Gäste.</div>
+          <span class="hcta" style="background:var(--salbei)">Zeig mir meine Seite</span>
+        </div>
+        <div class="props">
+          <div><p class="pl" style="color:var(--salbei)">reservierung</p><p class="pt">Gäste buchen selbst.</p><p class="px">Tag und Nacht, ohne Telefon.</p></div>
+          <div><p class="pl" style="color:var(--salbei)">tischplan</p><p class="pt">Ein Blick genügt.</p><p class="px">Wer sitzt wo, was ist frei.</p></div>
+          <div><p class="pl" style="color:var(--salbei)">karte</p><p class="pt">Mehrsprachig, sofort.</p><p class="px">Ändern, fertig, live.</p></div>
+        </div>
+        <div class="foot" style="background:var(--trueffel)"><span class="fc">Aufgetischt. Du bist Gastgeber.</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STIMME -->
+  <div class="card">
+    <h2 class="sec">Stimme &amp; Tabus</h2>
+    <p class="lead" style="margin-bottom:26px">Zwei Register. Die Marke spricht den Gastronomen per Du — kurze Sätze, Gastro-Sprache, trockenes Augenzwinkern. Die Gäste-Nachrichten, die der Gastronom verschickt, bleiben neutral und in seinem Ton.</p>
+    <div class="voice">
+      <div>
+        <h3>So klingt es</h3>
+        <div class="say">
+          <p>Wir tischen auf. Du bist Gastgeber.</p>
+          <p>Deine Seite steht. Schau sie dir an.</p>
+          <p>Gäste buchen selbst — Tag und Nacht.</p>
+        </div>
+        <span class="reg">du zum gastronomen · sie/neutral zum gast</span>
+      </div>
+      <div>
+        <h3>Tabu-Wörter</h3>
+        <div class="tabu">
+          <span>Tool</span><span>Plattform</span><span>Lösung</span><span>Feature</span><span>revolutionieren</span><span>Ihre Gastronomie</span>
+        </div>
+        <p>Kein SaaS-Sprech, kein Trachtenkitsch. Wärme aus Handwerk, nicht aus Heimat.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pageftr">Aufgetischt · Brand Sheet v1 · Bricolage Grotesque + Hanken Grotesk + Spline Sans Mono</div>
+
+</div>
+</body>
+</html>
