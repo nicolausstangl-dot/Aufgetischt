@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aufgetischt — Websites für dein Lokal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--leinen:#FBF6EA;--porzellan:#FCF8EF;--weiss:#FFFDF7;--sepia:#221A0F;--senf:#DA9A2B;--paprika:#C0492A;--salbei:#566031;--trueffel:#2D2719;--wacholder:#1A3A5E;--muted:#7d7558;--star:#E0A82E;--line:rgba(34,26,15,.12);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:84px}
+  body{font-family:'Hanken Grotesk',sans-serif;background:#20180f;color:var(--leinen);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+  /* ---- shared ---- */
+  .wrap{max-width:1060px;margin:0 auto}
+  .center{text-align:center}
+  .eyebrow{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.16em;color:var(--paprika);margin-bottom:22px}
+  .psub{font-size:clamp(16px,1.8vw,19px);line-height:1.5;color:#3F3622;max-width:52ch;margin:20px auto 0}
+  .lead{font-size:clamp(16px,1.8vw,19px);line-height:1.5;color:#3F3622;max-width:50ch;margin:18px auto 0}
+  h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(30px,5vw,58px);line-height:1;letter-spacing:-.035em;color:var(--trueffel)}
+  .rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .rv.in{opacity:1;transform:none}
+  .rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
+
+  /* ---- topnav ---- */
+  .topnav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;width:min(92vw,1080px);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 12px 10px 22px;border-radius:16px;background:linear-gradient(160deg,rgba(52,44,28,.34),rgba(26,21,13,.42));-webkit-backdrop-filter:blur(18px) saturate(1.25);backdrop-filter:blur(18px) saturate(1.25);border:1px solid rgba(251,246,234,.20);box-shadow:0 20px 46px -22px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.18)}
+  .tn-brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.03em;color:var(--leinen);text-decoration:none}
+  .tn-brand .per2{color:var(--paprika)}
+  .tn-links{display:flex;gap:26px;align-items:center}
+  .tn-links a{font-family:'Hanken Grotesk',sans-serif;font-weight:500;font-size:14.5px;color:rgba(251,246,234,.82);text-decoration:none;transition:color .15s}
+  .tn-links a:hover{color:var(--leinen)}
+  .tn-links a.tn-login{color:rgba(251,246,234,.66);margin-left:4px}
+  .tn-links a.tn-login:hover{color:var(--leinen)}
+  .tn-links a.tn-cta{font-weight:600;color:var(--trueffel);background:var(--senf);padding:9px 17px;border-radius:10px;transition:transform .15s ease,filter .15s ease}
+  .tn-links a.tn-cta:hover{color:var(--trueffel);transform:translateY(-1px);filter:brightness(1.06)}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px}
+  .burger span{width:22px;height:2px;background:var(--leinen);border-radius:2px}
+  @media(max-width:720px){.burger{display:flex}.tn-links{position:absolute;top:calc(100% + 8px);left:0;right:0;flex-direction:column;gap:0;align-items:stretch;border-radius:14px;background:linear-gradient(160deg,rgba(45,39,25,.98),rgba(26,21,13,.99));border:1px solid rgba(251,246,234,.16);padding:6px 0;transform:translateY(-8px);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}.tn-links.open{transform:none;opacity:1;pointer-events:auto}.tn-links a{padding:13px 22px}.tn-links a.tn-login{margin-left:0}.tn-links a.tn-cta{margin:8px 14px 6px;text-align:center;border-radius:10px}}
+
+  /* ---- HERO / MISSION / APP (block 1) ---- */
+  .glass{background:linear-gradient(160deg,rgba(52,44,28,.40),rgba(32,27,17,.52));-webkit-backdrop-filter:blur(13px) saturate(1.2);backdrop-filter:blur(13px) saturate(1.2);border:1px solid rgba(251,246,234,.18);box-shadow:0 26px 54px -24px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.2)}
+  .hero{position:relative;height:100vh;min-height:600px;width:100%;overflow:hidden;display:flex;align-items:center}
+  .bg{position:absolute;inset:0;transform:scale(1.06);will-change:transform;background:radial-gradient(circle at 72% 55%, rgba(232,176,75,.35), transparent 40%),linear-gradient(135deg,#241a11,#4a3826 55%,#6b4f34)}
+  .bg video,.bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 36% 46%, transparent 36%, rgba(20,14,8,.52))}
+  .panel{position:relative;z-index:15;margin-left:clamp(20px,7vw,110px);max-width:540px;padding:40px 42px 44px;border-radius:24px;will-change:transform}
+  .kick{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.16em;color:var(--senf);margin-bottom:22px;opacity:0;transform:translateY(16px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(34px,5.2vw,62px);line-height:.98;letter-spacing:-.035em}
+  h1 .ln{display:block;overflow:hidden}
+  h1 .ln span{display:block;transform:translateY(105%);transition:transform .9s cubic-bezier(.2,.75,.2,1)}
+  .sub{font-size:clamp(15px,1.6vw,18px);color:rgba(251,246,234,.82);margin:22px 0 30px;max-width:30ch;opacity:0;transform:translateY(16px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .cta{font-size:15px;font-weight:600;padding:15px 28px;border-radius:12px;background:var(--leinen);color:var(--trueffel);border:none;cursor:pointer;text-decoration:none;display:inline-block;opacity:0;transform:translateY(16px);transition:.7s cubic-bezier(.2,.7,.2,1);transition-delay:.1s}
+  .cta:hover{transform:translateY(-3px)}
+  .go .kick{opacity:1;transform:none;transition-delay:.35s}
+  .go h1 .ln span{transform:none}
+  .go h1 .ln:nth-child(1) span{transition-delay:.15s}.go h1 .ln:nth-child(2) span{transition-delay:.28s}
+  .go .sub{opacity:1;transform:none;transition-delay:.5s}
+  .go .cta{opacity:1;transform:none;transition-delay:.6s}
+  .els{position:absolute;inset:0;z-index:12;pointer-events:none}
+  .el{position:absolute;opacity:0;transform:translateY(26px) scale(.9);transition:opacity .5s ease,transform .62s cubic-bezier(.2,.9,.3,1.35)}
+  .el.show{opacity:1;transform:translateY(0) scale(1)}
+  .par{will-change:transform}
+  .fl{transform:rotate(var(--rot))}
+  .card{border-radius:18px;padding:15px 17px;pointer-events:auto;cursor:default;transition:transform .28s cubic-bezier(.2,.7,.2,1),box-shadow .28s ease}
+  .card:hover{transform:scale(1.08);box-shadow:0 34px 66px -24px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.2)}
+  .ct{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;color:rgba(251,246,234,.62);margin-bottom:11px}
+  .tisch{width:212px}
+  .floor{position:relative;height:92px;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid rgba(251,246,234,.08)}
+  .tbl{position:absolute;width:19px;height:19px;border-radius:6px}.tbl.rnd{border-radius:50%}
+  .free{border:1.5px solid rgba(124,154,84,.95)}.busy{background:rgba(251,246,234,.32)}
+  .sel{border:2px solid var(--senf);box-shadow:0 0 0 4px rgba(218,154,43,.25)}
+  .leg{display:flex;gap:12px;margin-top:11px;font-family:'Spline Sans Mono',monospace;font-size:9.5px;color:rgba(251,246,234,.6)}
+  .leg span{display:flex;align-items:center;gap:5px}.leg i{width:8px;height:8px;border-radius:3px;display:inline-block}
+  .menu{width:250px}
+  .mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .langs{font-family:'Spline Sans Mono',monospace;font-size:11px;color:rgba(251,246,234,.5);display:flex;gap:8px}
+  .langs b{color:var(--trueffel);background:var(--senf);border-radius:6px;padding:2px 7px;font-weight:500}
+  .dish{display:flex;align-items:baseline;gap:8px;margin-bottom:9px}
+  .dish .dn{font-size:14px;color:var(--leinen)}
+  .dish .ld{flex:1;border-bottom:1px dotted rgba(251,246,234,.28);transform:translateY(-4px)}
+  .dish .pr{font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--senf)}
+  .slots{width:210px}
+  .pills{display:flex;gap:7px}
+  .pills span{font-family:'Spline Sans Mono',monospace;font-size:12px;padding:7px 11px;border-radius:9px;background:rgba(251,246,234,.1);color:rgba(251,246,234,.8)}
+  .pills span.on{background:var(--senf);color:var(--trueffel)}
+  .event{width:200px}
+  .ebar{height:7px;border-radius:99px;background:rgba(251,246,234,.16);overflow:hidden;margin:4px 0 9px}
+  .ebar i{display:block;height:100%;width:75%;background:var(--paprika);border-radius:99px}
+  .es{font-family:'Spline Sans Mono',monospace;font-size:11px;color:rgba(251,246,234,.7)}
+  .daycard{width:214px}
+  .dwrap{display:flex;gap:12px;align-items:center}
+  .thumb{width:44px;height:44px;border-radius:11px;flex:none;background:radial-gradient(circle at 32% 34%,#E8B04B,transparent 55%),linear-gradient(135deg,#B7472B,#42502F)}
+  .dn2{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:15px;color:var(--leinen)}
+  .rate{width:190px}
+  .stars{color:var(--senf);font-size:15px;letter-spacing:3px;line-height:1}.stars .off{color:rgba(218,154,43,.32)}
+  .rt{font-family:'Spline Sans Mono',monospace;font-size:11px;color:rgba(251,246,234,.7);margin-top:7px}
+  .cue{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:16;display:flex;align-items:center;gap:11px;padding:12px 22px 12px 24px;border-radius:999px;font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.14em;color:var(--leinen);background:rgba(28,24,18,.74);border:1px solid rgba(251,246,234,.26);animation:bob 1.8s ease-in-out infinite}
+  .cue .chev{font-size:18px;line-height:1}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+  .sec{padding:11vh 8vw}
+  .leinen{background:var(--leinen);color:var(--sepia)}
+  .porz{background:var(--porzellan);color:var(--sepia)}
+  .statement{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(38px,7vw,88px);line-height:.98;letter-spacing:-.038em;color:var(--trueffel)}
+  .mtitle{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(30px,4.6vw,52px);line-height:1.02;letter-spacing:-.03em;color:var(--wacholder);max-width:18ch}
+  .prose{font-size:clamp(16px,1.8vw,19px);line-height:1.6;color:#3F3622;max-width:60ch;margin-top:24px}
+  .prose+.prose{margin-top:16px}
+  .mcard{margin-top:42px;max-width:760px;padding:26px 30px;border-radius:16px;background:var(--trueffel)}
+  .mcard .ml{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--senf);margin-bottom:10px}
+  .mcard .mt{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(19px,2.4vw,24px);line-height:1.25;color:var(--leinen);letter-spacing:-.01em}
+  .wild{position:relative;min-height:96vh;display:flex;align-items:center;overflow:hidden;background:#221a11;color:var(--leinen);padding:9vh 8vw}
+  .wild .simg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+  .wild .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(95deg,rgba(20,14,8,.85),rgba(20,14,8,.3) 55%,rgba(20,14,8,.58))}
+  .winner{position:relative;z-index:2;width:100%;max-width:1160px;margin:0 auto;display:flex;align-items:flex-start;justify-content:center;gap:clamp(20px,2.5vw,44px)}
+  .wpanel{flex:0 1 520px;padding:34px 36px 38px;border-radius:22px}
+  .wpanel .k{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.16em;color:var(--senf);margin-bottom:20px}
+  .wpanel h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(30px,4.2vw,54px);line-height:1;letter-spacing:-.035em;color:var(--leinen)}
+  .wpanel .wp{font-size:clamp(15px,1.6vw,18px);line-height:1.5;color:rgba(251,246,234,.85);max-width:34ch;margin:20px 0 24px}
+  .appicon{border-radius:8px;background:var(--leinen);color:var(--trueffel);display:inline-flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.04em}
+  .appicon .per{color:var(--paprika)}
+  .homechip{display:inline-flex;align-items:center;gap:11px;padding:8px 17px 8px 8px;border-radius:14px;font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--leinen)}
+  .homechip .appicon{width:34px;height:34px;font-size:15px;flex:none}
+  .iphone{flex:none;position:relative;width:314px;border-radius:50px;background:#0c0a07;padding:11px;border:1px solid rgba(251,246,234,.14);box-shadow:0 54px 96px -36px rgba(0,0,0,.78)}
+  .iscreen{position:relative;border-radius:40px;overflow:hidden;height:632px;background:linear-gradient(180deg,#242018,#14110c 70%)}
+  .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:88px;height:26px;border-radius:99px;background:#000;z-index:4}
+  .lockhead{text-align:center;padding-top:58px;color:var(--leinen)}
+  .lockhead .ld{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(251,246,234,.72)}
+  .lockhead .lc{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:74px;letter-spacing:-.03em;line-height:1;margin-top:3px}
+  .nstream{position:absolute;left:12px;right:12px;bottom:20px;display:flex;flex-direction:column;gap:9px}
+  .notif{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:17px;background:linear-gradient(160deg,rgba(40,34,24,.82),rgba(24,20,14,.88));border:1px solid rgba(251,246,234,.14);opacity:0;transform:translateY(-12px) scale(.96);transition:opacity .5s ease,transform .5s cubic-bezier(.2,.8,.2,1)}
+  .notif.show{opacity:1;transform:none}
+  .notif.leave{opacity:0;transform:translateY(10px) scale(.97)}
+  .notif .appicon{width:30px;height:30px;font-size:12px;flex:none}
+  .notif .nt{font-size:12px;font-weight:600;color:var(--leinen);display:flex;justify-content:space-between;gap:8px}
+  .notif .ntime{font-family:'Spline Sans Mono',monospace;font-size:9px;color:rgba(251,246,234,.5);flex:none}
+  .notif .nb{font-size:11px;color:rgba(251,246,234,.8);margin-top:1px}
+  @media(max-width:960px){
+    .hero{height:auto;min-height:0;flex-direction:column;align-items:stretch;padding-top:96px}
+    .els{position:static;display:flex;flex-direction:column;gap:18px;padding:24px 5vw 40px}
+    .el{position:static!important;width:84%;max-width:290px}.el:nth-child(odd){align-self:flex-start}.el:nth-child(even){align-self:flex-end}.els .card{width:100%!important}.fl{transform:none!important}.cue{display:none}
+    .panel{margin:0 auto;max-width:min(540px,92vw)}
+  }
+  @media(max-width:900px){.wild{min-height:0;padding:12vh 7vw}.winner{flex-direction:column;gap:40px}.wpanel{max-width:none;flex:0 0 auto;width:100%}.wild .scrim{background:linear-gradient(rgba(20,14,8,.5),rgba(20,14,8,.66))}}
+
+  /* ---- BEISPIEL / proof (block 2) ---- */
+  .proof{padding:13vh 7vw;background:var(--leinen);color:var(--sepia)}
+  .win{background:var(--weiss);border:1px solid rgba(34,26,15,.12);border-radius:14px;overflow:hidden;box-shadow:0 30px 66px -40px rgba(26,58,94,.4)}
+  .bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(34,26,15,.08);background:var(--porzellan)}
+  .bar .dots{display:flex;gap:6px;flex:none}.bar .dots i{width:9px;height:9px;border-radius:50%}
+  .bar .url{flex:1;font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--muted);background:#fff;border-radius:7px;padding:6px 12px;border:1px solid rgba(34,26,15,.08);text-align:left}
+  .bar .visit{font-family:'Spline Sans Mono',monospace;font-size:12px;padding:8px 15px;border-radius:8px;background:var(--wacholder);color:var(--leinen);text-decoration:none;white-space:nowrap;transition:transform .15s}
+  .bar .visit:hover{transform:translateY(-2px)}
+  .win img{width:100%;height:auto;display:block}
+  .main{margin:44px auto 0;max-width:980px}
+  .cfg-intro{text-align:center;margin:70px 0 22px}
+  .cfg-intro .kk{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.12em;color:var(--paprika);margin-bottom:12px}
+  .cfg-intro h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(24px,3.6vw,40px);letter-spacing:-.03em;color:var(--trueffel);line-height:1.02}
+  .cfg-intro p{font-size:15px;color:#4A4231;max-width:46ch;margin:12px auto 0}
+  .switch{position:sticky;top:74px;z-index:5;display:flex;flex-wrap:wrap;justify-content:center;gap:26px;margin:26px auto 8px;padding:14px 22px;background:rgba(251,246,234,.985);border:1px solid rgba(34,26,15,.12);border-radius:14px;width:fit-content;max-width:100%}
+  .sw-row{display:flex;align-items:center;gap:10px}
+  .sw-lbl{font-family:'Spline Sans Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--muted)}
+  .sw{width:26px;height:26px;border-radius:50%;background:var(--c);border:2px solid transparent;outline:2px solid transparent;cursor:pointer;transition:outline-color .15s;padding:0}
+  .sw.active{outline-color:var(--trueffel);outline-offset:2px}
+  .fbtn{font-family:'Spline Sans Mono',monospace;font-size:12px;padding:7px 13px;border-radius:8px;border:1px solid rgba(34,26,15,.15);background:transparent;color:var(--sepia);cursor:pointer}
+  .fbtn.active{background:var(--trueffel);color:var(--leinen);border-color:transparent}
+  .showcase{--paper:#FFFDF7;--ink:#221A0F;--acc:#7c2230;--acc-ink:#FFF8EE;--fdisp:'Playfair Display',serif;--fbody:'Hanken Grotesk',sans-serif}
+  .feature{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:center;margin-top:clamp(48px,7vh,84px)}
+  .fdesc .fl2{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.1em;color:var(--paprika);margin-bottom:14px}
+  .fdesc h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(22px,2.9vw,32px);letter-spacing:-.025em;color:var(--trueffel);line-height:1.04}
+  .fdesc p{font-size:15px;color:#4A4231;line-height:1.55;margin-top:15px}
+  .fdesc p+p{margin-top:10px}
+  .fcard{background:var(--paper);border:1px solid var(--acc-line,rgba(34,26,15,.1));border-radius:16px;padding:26px 28px;box-shadow:0 26px 56px -38px rgba(0,0,0,.45);color:var(--ink);font-family:var(--fbody);transition:background .25s,color .25s,border-color .25s}
+  .pct{font-family:var(--fdisp);font-weight:700;font-size:24px;color:var(--ink);letter-spacing:-.01em;margin-bottom:18px}
+  .rowh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+  .rowh .pct,.rowh .cath{margin:0}
+  .accbtn{margin-top:18px;width:100%;background:var(--acc);color:var(--acc-ink);border:none;border-radius:11px;padding:14px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--fbody)}
+  .fg{margin-bottom:13px}
+  .fg label{display:block;font-size:12px;opacity:.6;margin-bottom:6px}
+  .inp{border:1px solid rgba(34,26,15,.1);border-radius:10px;padding:12px 14px;font-size:14px}
+  .frow{display:flex;gap:12px}.frow .fg{flex:1;margin-bottom:0}
+  .detailbox{border:1px solid rgba(34,26,15,.1);border-radius:12px;padding:15px}
+  .detailbox .dl{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:12px}
+  .pfloor{position:relative;height:98px;border:1px solid rgba(34,26,15,.1);border-radius:10px}
+  .ptbl{position:absolute;width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(34,26,15,.16);cursor:pointer;transition:.15s}
+  .ptbl.rnd{border-radius:50%}
+  .ptbl.pbusy{background:var(--ink);opacity:.16;cursor:not-allowed;border-color:transparent}
+  .ptbl.psel{border-color:var(--acc);background:var(--acc)}
+  .floorleg{display:flex;gap:16px;margin-top:10px;font-size:11px;opacity:.65}
+  .floorleg span{display:flex;align-items:center;gap:5px}
+  .lg{width:11px;height:11px;border-radius:4px;display:inline-block}
+  .lg.pfree{border:1.5px solid rgba(34,26,15,.3)}.lg.pbusy{background:var(--ink);opacity:.16}.lg.psel{background:var(--acc)}
+  .cath{font-family:var(--fdisp);font-weight:700;font-size:22px;white-space:nowrap}
+  .pdish{display:flex;align-items:baseline;gap:12px;padding:13px 0;border-bottom:1px solid rgba(34,26,15,.1)}
+  .pdish:last-child{border-bottom:none}
+  .pdish>div:first-child{min-width:0;overflow-wrap:break-word}
+  .dn{font-size:15px;font-weight:600}
+  .dsub{font-size:12.5px;opacity:.55;margin-top:2px}
+  .ld{flex:1;border-bottom:1px dotted rgba(34,26,15,.2);align-self:flex-end;margin-bottom:5px;min-width:20px}
+  .pr{font-family:var(--fdisp);color:var(--acc);font-size:17px;white-space:nowrap}
+  .lang{display:inline-flex;gap:5px}
+  .lang b{font-size:11px;padding:5px 10px;border-radius:7px;border:1px solid rgba(34,26,15,.1);font-weight:500;cursor:pointer}
+  .lang b.on{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+  .rev{padding:16px 0;border-top:1px solid rgba(34,26,15,.1)}
+  .rev:first-of-type{border-top:none;padding-top:2px}
+  .rtxt{font-family:var(--fdisp);font-style:italic;font-size:15.5px;line-height:1.5}
+  .rmeta{display:flex;align-items:center;gap:11px;margin-top:12px}
+  .av{width:40px;height:40px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:flex;align-items:center;justify-content:center;font-family:var(--fdisp);font-weight:700;font-size:15px;flex:none}
+  .rn{font-size:14px;font-weight:600}
+  .pstars{color:var(--star);font-size:12px;letter-spacing:1.5px;margin-top:1px}
+  .src{font-family:'Spline Sans Mono',monospace;font-size:11px;opacity:.5;margin-top:14px}
+  .wkhead{background:var(--acc);color:var(--acc-ink);border-radius:12px 12px 0 0;margin:-26px -28px 0;padding:16px 24px;display:flex;align-items:baseline;justify-content:space-between}
+  .wkhead .wday{font-family:var(--fdisp);font-weight:700;font-size:20px}
+  .wkhead .wdate{font-family:'Spline Sans Mono',monospace;font-size:12px;opacity:.85}
+  .wkbody{padding-top:16px}
+  .wl{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);margin-top:14px}
+  .wl:first-child{margin-top:0}
+  .wv{font-size:15px;font-weight:600;margin-top:4px}
+  .wsub{display:block;font-size:12.5px;opacity:.55;font-weight:400;margin-top:2px}
+  .wkfoot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(34,26,15,.1);margin-top:16px;padding-top:14px}
+  .wprice{font-family:var(--fdisp);color:var(--acc);font-size:20px}
+  .lrow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid rgba(34,26,15,.1);font-size:15px}
+  .lrow:first-of-type{border-top:none}
+  .lrow .day{opacity:.6;font-size:13px;border:none;border-radius:0;padding:0;background:none;display:inline}
+  .badge{font-size:11px;background:var(--acc);color:var(--acc-ink);padding:6px 12px;border-radius:999px;font-family:'Spline Sans Mono',monospace}
+  .contact{margin-top:16px;padding-top:16px;border-top:1px solid rgba(34,26,15,.1);display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px}
+  .contact .cl{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);align-self:center}
+  .evsub{font-size:14px;opacity:.7;margin-bottom:14px}
+  .capbar{height:9px;border-radius:99px;background:rgba(34,26,15,.1);overflow:hidden;margin:2px 0 9px}
+  .capbar i{display:block;height:100%;background:var(--acc);border-radius:99px}
+  .caprow{display:flex;justify-content:space-between;font-size:13px;opacity:.85}
+  .capfree{color:var(--acc);font-weight:600;opacity:1}
+  .soon{font-family:'Spline Sans Mono',monospace;font-size:10.5px;opacity:.5;margin-top:12px;text-align:center}
+  .mystery{margin-top:clamp(48px,7vh,84px);background:var(--acc);color:var(--acc-ink);border-radius:18px;padding:clamp(32px,5vw,52px);text-align:center;transition:background .25s,color .25s}
+  .mystery .myk{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.14em;opacity:.8;margin-bottom:14px}
+  .mystery .myh{font-family:var(--fdisp);font-weight:700;font-size:clamp(24px,3.4vw,38px);letter-spacing:-.02em;line-height:1.05}
+  .mystery .myp{font-size:clamp(15px,1.7vw,18px);opacity:.9;max-width:44ch;margin:14px auto 26px;line-height:1.5}
+  .myform{max-width:520px;margin:0 auto;text-align:left}
+  .myrow{display:flex;gap:12px;margin-bottom:12px}
+  .myform input,.myform textarea{width:100%;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);border-radius:10px;padding:13px 15px;font-size:14px;color:var(--acc-ink);font-family:var(--fbody)}
+  .myform input::placeholder,.myform textarea::placeholder{color:var(--acc-ink);opacity:.6}
+  .myform textarea{min-height:96px;resize:vertical;margin-bottom:14px}
+  .myform button{width:100%;background:var(--acc-ink);color:var(--acc);border:none;border-radius:11px;padding:14px;font-weight:600;font-size:15px;cursor:pointer;font-family:var(--fbody)}
+  .myform button:disabled{opacity:.6;cursor:default}
+  .myform .mynote{margin-top:14px;font-size:13.5px;line-height:1.45;min-height:18px;opacity:.92}
+  .pquote{max-width:640px;margin:44px auto 0;text-align:center}
+  .pquote p{font-family:'Bricolage Grotesque',sans-serif;font-weight:500;font-size:clamp(19px,2.4vw,26px);line-height:1.3;letter-spacing:-.01em;color:var(--trueffel)}
+  .pquote .pcite{font-family:'Spline Sans Mono',monospace;font-size:12px;color:var(--muted);margin-top:16px}
+  @media(max-width:820px){.feature{grid-template-columns:1fr;gap:30px;margin-top:76px}.fdesc{order:-1}.bar .url{display:none}.switch{position:sticky;top:78px}.myrow{flex-direction:column}.cath{white-space:normal}}
+
+  /* ---- SO LÄUFT'S / PREIS / ABSCHLUSS (block 3) ---- */
+  .csec{padding:12vh 7vw;background:var(--leinen);color:var(--sepia)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
+  .step{background:var(--weiss);border:1px solid var(--line);border-radius:16px;padding:26px 24px;text-align:left}
+  .step .no{font-family:'Spline Sans Mono',monospace;font-size:13px;color:var(--paprika);letter-spacing:.06em}
+  .step h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;letter-spacing:-.02em;color:var(--trueffel);margin:12px 0 8px}
+  .step p{font-size:14.5px;line-height:1.5;color:#4A4231}
+  .price{background-color:var(--porzellan);background-image:repeating-linear-gradient(45deg,rgba(45,39,25,.045) 0 1px,transparent 1px 22px),repeating-linear-gradient(-45deg,rgba(45,39,25,.045) 0 1px,transparent 1px 22px)}
+  .pgrid{display:grid;grid-template-columns:1.12fr .88fr;gap:20px;margin-top:48px;align-items:stretch}
+  .pcard{background:var(--trueffel);color:var(--leinen);border-radius:20px;padding:34px 36px;display:flex;flex-direction:column}
+  .pcard .pk{font-family:'Spline Sans Mono',monospace;font-size:14px;letter-spacing:.1em;color:var(--senf);margin-bottom:14px}
+  .pcard .amount{display:flex;align-items:baseline;gap:9px}
+  .pcard .amount .big{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;letter-spacing:-.03em}
+  .pcard .amount .per{font-size:14px;color:#c8c2ae}
+  .pcard .incl{list-style:none;margin:22px 0 0;display:grid;gap:11px}
+  .pcard .incl li{display:flex;gap:11px;font-size:15px;color:#EDE7D6}
+  .pcard .incl li .ck{color:var(--senf);font-weight:700}
+  .pcard .dom{margin-top:22px;padding-top:18px;border-top:1px solid rgba(251,246,234,.14);font-size:13.5px;color:#c8c2ae;line-height:1.5}
+  .pside{display:flex;flex-direction:column;gap:20px}
+  .note{background:var(--weiss);border:1px solid var(--line);border-radius:18px;padding:26px 28px}
+  .note.grow{flex:1}
+  .note .nk{font-family:'Spline Sans Mono',monospace;font-size:13px;letter-spacing:.08em;color:var(--paprika);margin-bottom:10px}
+  .note h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px;letter-spacing:-.02em;color:var(--trueffel);margin-bottom:10px}
+  .note p{font-size:14.5px;line-height:1.55;color:#4A4231}
+  .final{position:relative;overflow:hidden;background:var(--trueffel);color:var(--leinen);text-align:center}
+  .final .wrap{position:relative;z-index:1}
+  .final .eyebrow{color:var(--senf)}
+  .bggrid{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .ghost{position:absolute;border:1px solid rgba(251,246,234,.16);border-radius:10px;background:rgba(251,246,234,.03);opacity:0;animation:ghost var(--gd,11s) ease-in-out infinite;animation-delay:var(--gdl,0s)}
+  .ghost .gd{display:flex;gap:4px;padding:7px 9px;border-bottom:1px solid rgba(251,246,234,.12)}
+  .ghost .gd i{width:5px;height:5px;border-radius:50%;background:rgba(251,246,234,.28)}
+  .ghost .gw{padding:11px 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.03em;color:rgba(251,246,234,.22)}
+  @keyframes ghost{0%{opacity:0;transform:translateY(14px) scale(.98)}18%{opacity:1}60%{opacity:1}100%{opacity:0;transform:translateY(-16px) scale(.98)}}
+  .brandmark{margin:10px auto 2px}
+  .bwin{background:var(--leinen);border-radius:14px;overflow:hidden;box-shadow:0 42px 82px -34px rgba(0,0,0,.62);border:1px solid rgba(251,246,234,.1);opacity:0;transform:translateY(20px) scale(.97);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+  .brandmark.in .bwin{opacity:1;transform:none}
+  .bbar{display:flex;align-items:center;gap:8px;padding:13px 17px;border-bottom:1px solid rgba(34,26,15,.1)}
+  .bbar i{width:11px;height:11px;border-radius:50%;opacity:0;transform:scale(.3);transition:opacity .35s ease,transform .4s cubic-bezier(.2,1.6,.4,1)}
+  .brandmark.in .bbar i{opacity:1;transform:none}
+  .brandmark.in .bbar i:nth-child(1){transition-delay:.5s}
+  .brandmark.in .bbar i:nth-child(2){transition-delay:.6s}
+  .brandmark.in .bbar i:nth-child(3){transition-delay:.7s}
+  .bbar .burl{flex:1;height:11px;border-radius:6px;background:rgba(34,26,15,.06);max-width:180px;margin-left:6px}
+  .bbody{padding:40px 28px 46px;text-align:center}
+  .bwm{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(46px,8.5vw,82px);letter-spacing:-.035em;color:var(--leinen);line-height:1;opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+  .brandmark.in .bwm{opacity:1;transform:none;transition-delay:.15s}
+  .bwm .per{display:inline-block;color:var(--paprika);transform-origin:bottom center}
+  @keyframes hop{0%{transform:translateY(0);animation-timing-function:ease-out}26%{transform:translateY(-1.25em);animation-timing-function:ease-in}52%{transform:translateY(0);animation-timing-function:ease-out}68%{transform:translateY(-0.45em);animation-timing-function:ease-in}82%{transform:translateY(0);animation-timing-function:ease-out}90%{transform:translateY(-0.15em);animation-timing-function:ease-in}100%{transform:translateY(0)}}
+  @keyframes pop{to{transform:scale(1)}}
+  .fclaim{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:clamp(20px,2.6vw,30px);color:var(--leinen);letter-spacing:-.02em;line-height:1.1;margin-top:28px}
+  .booking{max-width:min(920px,100%);margin:14px auto 0;background:var(--leinen);border-radius:18px;padding:10px;text-align:left;overflow:hidden}
+  #my-cal-inline-30min{width:100%;min-height:640px;border-radius:12px;overflow:auto;background:#fff}
+  .bkhead{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px;color:var(--trueffel);letter-spacing:-.01em;margin-bottom:16px}
+  .bkhead span{font-family:'Hanken Grotesk',sans-serif;font-weight:400;font-size:13px;color:var(--muted)}
+  .bklabel{font-family:'Spline Sans Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+  .weeknav{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+  .wnav{display:flex;align-items:center;gap:10px}
+  .wlabel{font-family:'Hanken Grotesk',sans-serif;font-size:13px;font-weight:600;color:var(--sepia);min-width:96px;text-align:center}
+  .warr{width:28px;height:28px;border:1px solid var(--line);border-radius:8px;background:transparent;cursor:pointer;color:var(--sepia);font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+  .warr:hover{background:rgba(0,0,0,.04)}
+  .warr:disabled{opacity:.3;cursor:not-allowed}
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:16px}
+  .day{border:1px solid var(--line);border-radius:10px;padding:9px 0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;background:transparent}
+  .day .dw{font-family:'Spline Sans Mono',monospace;font-size:9px;color:var(--muted)}
+  .day .dd{font-size:15px;font-weight:600;color:var(--trueffel)}
+  .day.on{background:var(--trueffel);border-color:transparent}
+  .day.on .dw{color:#c8c2ae}.day.on .dd{color:var(--leinen)}
+  .day.off{opacity:.32;cursor:not-allowed;pointer-events:none}
+  .day.wknd .dw{color:var(--paprika)}
+  .cslots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+  .cslots button{border:1px solid var(--line);border-radius:9px;padding:10px 0;font-size:13px;cursor:pointer;background:transparent;font-family:'Spline Sans Mono',monospace;color:var(--sepia)}
+  .cslots button.on{background:var(--senf);color:var(--trueffel);border-color:transparent}
+  .bkmsg{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Hanken Grotesk',sans-serif;color:var(--sepia);min-height:72px;resize:vertical;margin-bottom:14px}
+  .bkmsg::placeholder{color:var(--muted)}
+  .captcha{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--sepia);cursor:pointer;user-select:none}
+  .cbox{width:22px;height:22px;border:2px solid var(--muted);border-radius:5px;flex:none;position:relative;transition:.15s}
+  .captcha.checked .cbox{background:var(--salbei);border-color:transparent}
+  .captcha.checked .cbox::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+  .cprov{margin-left:auto;font-family:'Spline Sans Mono',monospace;font-size:9px;color:var(--muted);opacity:.6;line-height:1.2;text-align:right}
+  .bkbtn{width:100%;background:var(--senf);color:var(--trueffel);border:none;border-radius:11px;padding:15px;font-weight:600;font-size:15px;cursor:pointer;font-family:'Hanken Grotesk',sans-serif}
+  .bkfine{font-family:'Spline Sans Mono',monospace;font-size:11px;color:#9aa088;margin-top:14px;letter-spacing:.04em}
+  @media(max-width:760px){.steps{grid-template-columns:1fr}.pgrid{grid-template-columns:1fr}}
+
+  .site-footer{background:#181109;color:#cfc6b0;padding:80px 24px 44px;font-family:'Hanken Grotesk',sans-serif}
+  .ft-wrap{max-width:1000px;margin:0 auto}
+  .ft-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid rgba(251,246,234,.10)}
+  .ft-word{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;color:var(--leinen);letter-spacing:-.03em}
+  .ft-word span{color:var(--paprika)}
+  .ft-tag{margin-top:12px;font-size:16px;color:#9a9078;max-width:400px;line-height:1.55}
+  .ft-tag a,.ft-body a,.ft-links a{color:var(--senf);text-decoration:none}
+  .ft-tag a:hover,.ft-body a:hover,.ft-links a:hover{text-decoration:underline}
+  .ft-legal{display:flex;flex-direction:column;gap:8px;min-width:260px}
+  .ft-acc{border:1px solid rgba(251,246,234,.12);border-radius:10px;background:rgba(251,246,234,.03)}
+  .ft-acc summary{cursor:pointer;padding:16px 18px;font-family:'Spline Sans Mono',monospace;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--leinen);list-style:none}
+  .ft-acc summary::-webkit-details-marker{display:none}
+  .ft-acc summary::after{content:'+';float:right;color:#9a9078}
+  .ft-acc[open] summary::after{content:'\2013'}
+  .ft-body{padding:2px 18px 18px;font-size:13.5px;line-height:1.6;color:#a49a80}
+  .ft-body p{margin:0 0 9px}
+  .ft-body strong{color:#cfc6b0}
+  .ft-bar{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding-top:26px;font-family:'Spline Sans Mono',monospace;font-size:12.5px;color:#8c8268;letter-spacing:.03em}
+  @media(max-width:640px){.ft-top{flex-direction:column;gap:26px}.ft-legal{min-width:0}.bkhead span{display:block;margin-top:3px}}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .kick,.sub,.cta{opacity:1;transform:none}
+    h1 .ln span{transform:none}
+    .el,.rv{opacity:1;transform:none}
+    .bwm{opacity:1;transform:none}.bwm .per{transform:none;animation:none}
+    .ghost{opacity:0}
+  }
+</style>
+</head>
+<body id="top">
+
+  <nav class="topnav">
+    <a class="tn-brand" href="#top">Aufgetischt<span class="per2">.</span></a>
+    <button class="burger" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
+    <div class="tn-links" id="tnlinks">
+      <a href="#beispiel">So sieht's aus</a>
+      <a href="#ablauf">So läuft's</a>
+      <a href="#preis">Preis</a>
+      <a class="tn-login" href="https://restaurants.venturini.codes/">Kundenlogin</a>
+      <a class="tn-cta" href="#termin">Termin buchen</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="bg" id="bg">
+      <img src="hero-still.webp" alt="Warmes, sonnendurchflutetes Lokal mit Holztischen">
+    </div>
+    <div class="vignette"></div>
+
+    <div class="panel glass" id="panel">
+      <div class="kick">websites für lokale</div>
+      <h1><span class="ln"><span>Wir tischen auf.</span></span><span class="ln"><span>Du bist Gastgeber.</span></span></h1>
+      <p class="sub">Deine fertige Website steht — du machst sie nur noch live. Und dann läuft dein Lokal.</p>
+      <!-- CTA "Zeig mir meine Seite" (href="#termin") — vorerst entfernt. Wieder einsetzen, sobald es die KI-Self-Build-Funktion gibt (Seite auf Knopfdruck bauen). -->
+      <a class="cta" href="#termin">Unverbindlich starten</a>
+    </div>
+
+    <div class="els" id="els">
+      <div class="el" style="top:15%;right:6%" data-depth=".18"><div class="par"><div class="fl" style="--rot:2deg"><div class="card glass tisch">
+        <div class="ct">Tischplan · heute</div>
+        <div class="floor">
+          <span class="tbl rnd busy" style="left:14px;top:12px"></span><span class="tbl free" style="left:52px;top:16px"></span>
+          <span class="tbl rnd free" style="left:96px;top:10px"></span><span class="tbl sel" style="left:140px;top:18px"></span>
+          <span class="tbl busy" style="left:30px;top:52px"></span><span class="tbl rnd free" style="left:82px;top:56px"></span>
+          <span class="tbl free" style="left:150px;top:56px"></span>
+        </div>
+        <div class="leg"><span><i class="free" style="background:transparent"></i>frei</span><span><i class="busy"></i>belegt</span><span><i style="background:var(--senf)"></i>gewählt</span></div>
+      </div></div></div></div>
+
+      <div class="el" style="top:46%;right:13%" data-depth=".1"><div class="par"><div class="fl" style="--rot:-2deg"><div class="card glass menu">
+        <div class="mhead"><span class="ct" style="margin:0">Speisekarte</span><span class="langs"><b>DE</b>IT<span>TR</span></span></div>
+        <div class="dish"><span class="dn">Vitello Tonnato</span><span class="ld"></span><span class="pr">14</span></div>
+        <div class="dish"><span class="dn">Wolfsbarsch</span><span class="ld"></span><span class="pr">26</span></div>
+        <div class="dish"><span class="dn">Zitronen-Tarte</span><span class="ld"></span><span class="pr">9</span></div>
+      </div></div></div></div>
+
+      <div class="el" style="top:26%;right:31%" data-depth=".26"><div class="par"><div class="fl" style="--rot:3deg"><div class="card glass slots">
+        <div class="ct">Tisch reservieren</div>
+        <div class="pills"><span>18:30</span><span class="on">19:30</span><span>20:00</span></div>
+      </div></div></div></div>
+
+      <div class="el" style="bottom:16%;right:9%" data-depth=".2"><div class="par"><div class="fl" style="--rot:-3deg"><div class="card glass event">
+        <div class="ct">Weinabend · Freitag</div><div class="ebar"><i></i></div><div class="es">18 von 24 Plätzen</div>
+      </div></div></div></div>
+
+      <div class="el" style="top:58%;right:33%" data-depth=".15"><div class="par"><div class="fl" style="--rot:2deg"><div class="card glass daycard">
+        <div class="ct" style="margin-bottom:10px">Tagesgericht</div>
+        <div class="dwrap"><div class="thumb"></div><div class="dn2">Vitello Tonnato</div></div>
+      </div></div></div></div>
+
+      <div class="el" style="top:12%;right:27%" data-depth=".3"><div class="par"><div class="fl" style="--rot:-3deg"><div class="card glass rate">
+        <div class="stars">★★★★<span class="off">★</span></div><div class="rt">4,8 · 212 Bewertungen</div>
+      </div></div></div></div>
+    </div>
+
+    <a class="cue" href="#ruhe"><span>scroll</span><span class="chev">↓</span></a>
+  </section>
+
+  <!-- ===== RUHE ===== -->
+  <section class="sec leinen" id="ruhe">
+    <h2 class="statement rv">Du bist Gastronom.<br>Kein Webdesigner.</h2>
+  </section>
+
+  <!-- ===== IDEE / MISSION ===== -->
+  <section class="sec porz">
+    <div class="eyebrow rv">die idee</div>
+    <h2 class="mtitle rv d1">Der Gastgeber wird einmal selbst bewirtet.</h2>
+    <p class="prose rv d1">Ein Gastronom kümmert sich den ganzen Tag um andere. Um seine Website kümmert sich niemand — dafür ist nie Zeit. Aufgetischt dreht das um: Wir bauen die fertige Seite, du machst sie nur noch live. Reservierung, Tischplan, Karte laufen, während du am Tisch stehst, nicht im Backend.</p>
+    <p class="prose rv d2">Kein Baukasten, kein Technik-Kram, keine leere Vorlage. Für Gastronomen, nicht für Techniker. Wir verstehen Gastronomie — die Wärme kommt aus Essen und Handwerk, quer über alle Küchen.</p>
+    <div class="mcard rv d2">
+      <div class="ml">mission in einem satz</div>
+      <div class="mt">Jedes unabhängige Lokal verdient einen Auftritt, der so gut ist wie sein Essen — ohne dass der Gastronom eine Zeile Code sieht.</div>
+    </div>
+  </section>
+
+  <!-- ===== APP / WILDBAHN ===== -->
+  <section class="wild" id="wild">
+    <img class="simg" src="wild.webp" loading="lazy" alt="Handy auf Leinen-Tischdecke mit Gabel und Rotweinglas">
+    <div class="scrim"></div>
+    <div class="winner">
+      <div class="wpanel glass">
+        <div class="k rv">dein lokal in der hosentasche</div>
+        <h2 class="rv d1">Führe dein Lokal.<br>Von überall.</h2>
+        <p class="wp rv d1">Aufgetischt ist auch App. Einmal installiert, kannst du alle Funktionen steuern, wo immer du auch bist — von der Schank, vom Markt, von unterwegs.</p>
+        <div class="homechip glass rv d2"><span class="appicon">Auf<span class="per">.</span></span> den Startbildschirm</div>
+      </div>
+      <div class="rv d1">
+        <div class="iphone">
+          <div class="island"></div>
+          <div class="iscreen">
+            <div class="lockhead"><div class="ld">Freitag, 3. Juli</div><div class="lc">19:30</div></div>
+            <div class="nstream" id="nstream"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BEISPIEL (Dresdnerhof) ===== -->
+  <section class="proof" id="beispiel">
+    <div class="wrap">
+      <div class="center">
+        <div class="eyebrow rv">beispiel</div>
+        <h2 class="rv d1">Kein Mockup. Echt live.</h2>
+        <p class="psub rv d1">Der Dresdnerhof in Wien läuft auf Aufgetischt. Das ist seine echte Seite — und darunter jedes Element zum Anfassen.</p>
+      </div>
+
+      <div class="win main rv d1">
+        <div class="bar">
+          <span class="dots"><i style="background:var(--senf)"></i><i style="background:var(--paprika)"></i><i style="background:var(--salbei)"></i></span>
+          <span class="url">dresdnerhof.at</span>
+          <a class="visit" href="https://dresdnerhof.at" target="_blank" rel="noopener">Seite ansehen ↗</a>
+        </div>
+        <img src="dh-hero.webp" alt="Startseite des Dresdnerhof" loading="lazy">
+      </div>
+
+      <div class="pquote rv" style="margin-top:44px">
+        <p>„Ich steh in der Küche, nicht am Computer — und trotzdem hab ich endlich eine Seite, die was hermacht."</p>
+        <div class="pcite">— Inhaber, Dresdnerhof</div>
+      </div>
+
+      <div class="cfg-intro rv">
+        <div class="kk">jedes element, dein look</div>
+        <h3>So flexibel wird deine Seite.</h3>
+        <p>Wähl Farbe und Schrift — die Elemente unten ändern sich live. Genau so bauen wir deine.</p>
+      </div>
+
+      <div class="switch rv">
+        <div class="sw-row"><span class="sw-lbl">farbe</span>
+          <button class="sw active" data-theme="wein" style="--c:#7c2230" aria-label="Wein"></button>
+          <button class="sw" data-theme="wacholder" style="--c:#1A3A5E" aria-label="Wacholder"></button>
+          <button class="sw" data-theme="lorbeer" style="--c:#1A4A36" aria-label="Lorbeer"></button>
+          <button class="sw" data-theme="senf" style="--c:#DA9A2B" aria-label="Senf"></button>
+          <button class="sw" data-theme="nacht" style="--c:#242018" aria-label="Nacht"></button>
+        </div>
+        <div class="sw-row"><span class="sw-lbl">schrift</span>
+          <button class="fbtn active" data-font="klassisch">Klassisch</button>
+          <button class="fbtn" data-font="modern">Modern</button>
+          <button class="fbtn" data-font="schlicht">Schlicht</button>
+        </div>
+      </div>
+
+      <div class="showcase" id="showcase">
+
+        <div class="feature rv">
+          <div class="fcard">
+            <div class="pct">Tisch reservieren</div>
+            <div class="detailbox">
+              <div class="dl">Tisch wählen</div>
+              <div class="pfloor" id="floor">
+                <span class="ptbl rnd pbusy" style="left:8%;top:14px"></span>
+                <span class="ptbl pfree" style="left:26%;top:18px"></span>
+                <span class="ptbl rnd pfree" style="left:46%;top:12px"></span>
+                <span class="ptbl psel" style="left:66%;top:18px"></span>
+                <span class="ptbl pbusy" style="left:16%;top:58px"></span>
+                <span class="ptbl rnd pfree" style="left:40%;top:60px"></span>
+                <span class="ptbl pfree" style="left:72%;top:58px"></span>
+              </div>
+              <div class="floorleg"><span><i class="lg pfree"></i>frei</span><span><i class="lg pbusy"></i>belegt</span><span><i class="lg psel"></i>gewählt</span></div>
+            </div>
+            <div class="frow" style="margin-top:15px">
+              <div class="fg"><label>Datum</label><div class="inp">Fr, 4. Juli</div></div>
+              <div class="fg"><label>Uhrzeit</label><div class="inp">19:30</div></div>
+              <div class="fg"><label>Gäste</label><div class="inp">2</div></div>
+            </div>
+            <button class="accbtn">Tisch reservieren</button>
+          </div>
+          <div class="fdesc">
+            <div class="fl2">reservierung</div>
+            <h4>Tische wählen, nicht durchtelefonieren.</h4>
+            <p>Gäste sehen den Tischplan, wählen ihren Platz und buchen mit Datum, Uhrzeit und Personenzahl — direkt auf der Seite. Du bekommst jede Reservierung strukturiert.</p>
+            <p>Und wer lieber kurz anruft: Telefon und WhatsApp sind mit einem Tap dabei.</p>
+          </div>
+        </div>
+
+        <div class="feature rv">
+          <div class="fdesc">
+            <div class="fl2">google-rezensionen</div>
+            <h4>Deine besten Bewertungen, automatisch.</h4>
+            <p>Aufgetischt zieht die Rezensionen direkt von deinem Google-Profil auf die Seite — echt, mit Namen und Sternen, immer aktuell.</p>
+            <p>Du musst nichts kopieren und nichts pflegen. Eine neue gute Bewertung ist sofort sichtbar.</p>
+          </div>
+          <div class="fcard">
+            <div class="pct">Was unsere Gäste sagen</div>
+            <div class="rev">
+              <p class="rtxt">„Sehr flotte, entspannte und sympathische Bedienung, traditionell wienerische Speisekarte und der Grillteller war tadellos. Ich kehre ganz bestimmt bald wieder ein."</p>
+              <div class="rmeta"><div class="av">O</div><div><div class="rn">Oliver Ciontea</div><div class="pstars">★★★★★</div></div></div>
+            </div>
+            <div class="rev">
+              <p class="rtxt">„Waren an einem Wochentag essen. Service sehr nett, Essen rustikal, reichlich und lecker. Insgesamt empfehlenswert!"</p>
+              <div class="rmeta"><div class="av">T</div><div><div class="rn">T. „MadMue" M.</div><div class="pstars">★★★★★</div></div></div>
+            </div>
+            <div class="src">importiert von Google · immer aktuell</div>
+          </div>
+        </div>
+
+        <div class="feature rv">
+          <div class="fcard" data-lang="de">
+            <div class="rowh"><span class="cath t" data-de="Frischgemachte Speisen" data-en="Freshly Made Dishes">Frischgemachte Speisen</span><div class="lang"><b class="on" data-lang="de">DE</b><b data-lang="en">EN</b></div></div>
+            <div class="pdish"><div><div class="dn t" data-de="Bauernsteak" data-en="Farmer's Steak">Bauernsteak</div><div class="dsub t" data-de="mit Speck, Jungzwiebel und Braterdäpfel" data-en="with bacon, spring onion and roast potatoes">mit Speck, Jungzwiebel und Braterdäpfel</div></div><span class="ld"></span><span class="pr">€ 16,10</span></div>
+            <div class="pdish"><div><div class="dn t" data-de="Wiener Schnitzel" data-en="Wiener Schnitzel">Wiener Schnitzel</div><div class="dsub t" data-de="vom Schwein, mit Salat" data-en="pork, with salad">vom Schwein, mit Salat</div></div><span class="ld"></span><span class="pr">€ 14,50</span></div>
+            <div class="pdish"><div><div class="dn t" data-de="Cordon Bleu" data-en="Cordon Bleu">Cordon Bleu</div><div class="dsub t" data-de="mit Salat" data-en="with salad">mit Salat</div></div><span class="ld"></span><span class="pr">€ 16,20</span></div>
+            <div class="pdish"><div><div class="dn t" data-de="Schweinsbraten" data-en="Roast Pork">Schweinsbraten</div><div class="dsub t" data-de="mit Kraut und Knödel" data-en="with cabbage and dumpling">mit Kraut und Knödel</div></div><span class="ld"></span><span class="pr">€ 14,80</span></div>
+            <div class="pdish"><div><div class="dn t" data-de="Zwiebelrostbraten" data-en="Onion Roast Beef">Zwiebelrostbraten</div><div class="dsub t" data-de="mit Braterdäpfel" data-en="with roast potatoes">mit Braterdäpfel</div></div><span class="ld"></span><span class="pr">€ 20,30</span></div>
+          </div>
+          <div class="fdesc">
+            <div class="fl2">speisekarte</div>
+            <h4>Die Karte, die immer stimmt.</h4>
+            <p>Preise, Gerichte, Kategorien — in Minuten geändert, ohne Agentur. Was in der Küche passiert, steht sofort online.</p>
+            <p>Und auf einen Klick zweisprachig — probier den DE/EN-Umschalter, die Karte übersetzt sich wirklich.</p>
+          </div>
+        </div>
+
+        <div class="feature rv">
+          <div class="fdesc">
+            <div class="fl2">wochenmenü</div>
+            <h4>Mittagsmenü, jede Woche frisch.</h4>
+            <p>Du pflegst die ganze Woche selbst — so viele Gänge und Kategorien, wie du willst. Keine feste Vorlage, keine Grenze. Die neue Woche steht in Sekunden.</p>
+            <p>Genau das, was die Mittagspause-Gäste vorher wissen wollen.</p>
+          </div>
+          <div class="fcard">
+            <div class="wkhead"><span class="wday">Donnerstag</span><span class="wdate">Heute · 3. Juli</span></div>
+            <div class="wkbody">
+              <div class="wl">Suppe</div><div class="wv">Tagessuppe</div>
+              <div class="wl">Hauptspeise A</div><div class="wv">Gegrillter Leberkäse<span class="wsub">mit Spiegelei &amp; Erdäpfelpüree</span></div>
+              <div class="wl">Hauptspeise B</div><div class="wv">Blunzengröstl<span class="wsub">mit Kren</span></div>
+              <div class="wl">Dessert</div><div class="wv">Marillenknödel<span class="wsub">mit Butterbrösel</span></div>
+            </div>
+            <div class="wkfoot"><span>Menü inkl. Suppe</span><span class="wprice">€ 9,20</span></div>
+          </div>
+        </div>
+
+        <div class="feature rv">
+          <div class="fcard">
+            <div class="rowh"><div class="pct">Öffnungszeiten</div><span class="badge">jetzt geöffnet</span></div>
+            <div class="lrow"><span class="day">Mo–Fr</span><span>09:00 – 23:00</span></div>
+            <div class="lrow"><span class="day">Sa–So</span><span>11:00 – 22:00</span></div>
+            <div class="lrow"><span class="day">Feiertag</span><span>11:00 – 22:00</span></div>
+            <div class="contact">
+              <span class="cl">Adresse</span><span>Dresdner Straße 126, 1200 Wien</span>
+              <span class="cl">Telefon</span><span>01 / 330 18 09</span>
+            </div>
+          </div>
+          <div class="fdesc">
+            <div class="fl2">öffnungszeiten &amp; kontakt</div>
+            <h4>Alles, was Gäste suchen. Sofort.</h4>
+            <p>Adresse, Telefon, Öffnungszeiten — immer korrekt, mit Live-Status „jetzt geöffnet". Kein Gast steht mehr vor verschlossener Tür.</p>
+            <p>Ein Tap führt direkt zu Route, Anruf oder WhatsApp.</p>
+          </div>
+        </div>
+
+        <div class="feature rv">
+          <div class="fdesc">
+            <div class="fl2">veranstaltungen</div>
+            <h4>Eigene Events. Plätze buchbar.</h4>
+            <p>Erstelle deine Veranstaltungen selbst — Weinabend, Brunch, Aktionswoche — und mach Plätze direkt buchbar. Du siehst jederzeit, wie viele Gäste kommen: echte Planungssicherheit statt Rätselraten.</p>
+            <p>Bald bindest du einen Zahlungsanbieter an, sodass Tickets im Voraus bezahlt werden — dann ist deine Planung endgültig sicher.</p>
+          </div>
+          <div class="fcard">
+            <div class="rowh"><div class="pct">Weinverkostung</div><span class="badge">buchbar</span></div>
+            <div class="evsub">Freitag, 12. Juli · 19:00 Uhr</div>
+            <div class="capbar"><i style="width:70%"></i></div>
+            <div class="caprow"><span>28 von 40 Plätzen gebucht</span><span class="capfree">12 frei</span></div>
+            <button class="accbtn">Platz buchen · € 39</button>
+            <div class="soon">bald: direkt online bezahlen</div>
+          </div>
+        </div>
+
+        <div class="mystery rv">
+          <div class="myk">noch eine idee?</div>
+          <h3 class="myh">Das, was du suchst, gibt's noch nicht?</h3>
+          <p class="myp">Wir freuen uns, wenn unsere Kunden uns zu neuem Mehrwert inspirieren. Sag's uns direkt.</p>
+          <form class="myform" id="ideaform" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="30f9c951-79b7-413d-a719-271680ece4d1">
+            <input type="hidden" name="subject" value="Neue Feature-Idee über Aufgetischt.">
+            <input type="hidden" name="from_name" value="Aufgetischt Landingpage">
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+            <div class="myrow">
+              <input type="text" name="name" placeholder="Dein Name" required>
+              <input type="email" name="email" placeholder="Deine E-Mail" required>
+            </div>
+            <textarea name="message" placeholder="Welches Feature würde dir das Leben leichter machen?" required></textarea>
+            <button type="submit">Idee schicken</button>
+            <div class="mynote" id="ideanote" aria-live="polite"></div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SO LÄUFT'S ===== -->
+  <section class="csec" id="ablauf">
+    <div class="wrap center">
+      <div class="eyebrow rv">so läuft's</div>
+      <h2 class="rv d1">Von der Idee zur fertigen Seite.<br>In drei Schritten.</h2>
+      <p class="lead rv d1">Du musst nichts können und nichts vorbereiten. Wir machen die Arbeit — du schaust nur drüber.</p>
+      <div class="steps">
+        <div class="step rv d1"><div class="no">01</div><h3>Kennenlernen</h3><p>Ein kurzes Gespräch. Wir schauen uns dein Lokal, deine Fotos und dein Google-Profil an.</p></div>
+        <div class="step rv d2"><div class="no">02</div><h3>Wir bauen</h3><p>Aus deiner Karte, deinen Bildern und deinen Daten bauen wir die fertige Seite — komplett, ohne Aufwand für dich.</p></div>
+        <div class="step rv d3"><div class="no">03</div><h3>Live gehen</h3><p>Du schaust drüber, wir verknüpfen die Domain, und deine Seite geht online. Fertig aufgetischt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PREIS ===== -->
+  <section class="csec price" id="preis">
+    <div class="wrap center">
+      <div class="eyebrow rv">ein Preis, alles drin</div>
+      <h2 class="rv d1">Ein Preis. Kein Kleingedrucktes.</h2>
+      <div class="pgrid" style="text-align:left">
+        <div class="pcard rv d1">
+          <div class="pk">Aufgetischt Komplett</div>
+          <div class="amount"><span class="big">50 €</span><span class="per">/ Monat · im Jahresabo</span></div>
+          <ul class="incl">
+            <li><span class="ck">✓</span> Fertige Website, für dich gebaut</li>
+            <li><span class="ck">✓</span> Reservierung mit Tischplan</li>
+            <li><span class="ck">✓</span> Speisekarte &amp; Wochenmenü, mehrsprachig</li>
+            <li><span class="ck">✓</span> Events mit Platzbuchung</li>
+            <li><span class="ck">✓</span> Google-Rezensionen, automatisch</li>
+            <li><span class="ck">✓</span> App fürs Handy (an den Startbildschirm)</li>
+            <li><span class="ck">✓</span> Webhosting inklusive</li>
+            <li><span class="ck">✓</span> Laufende Pflege &amp; Updates</li>
+          </ul>
+          <div class="dom">Die Domain zahlst du selbst — meist nur ein paar Euro im Jahr. Ums Einrichten und Verknüpfen kümmern wir uns.</div>
+        </div>
+        <div class="pside">
+          <div class="note grow rv d2">
+            <div class="nk">größer gedacht?</div>
+            <h4>Maßgeschneiderte Lösungen</h4>
+            <p>Manche Lokale haben besondere Abläufe — eigene Buchungslogik, Schnittstellen zu Kassa oder Lieferdiensten, ganz eigene Ideen. Genau dafür bauen wir dir individuelle Lösungen: auf demselben starken Backend, aber eigens für dich entwickelt und gesondert kalkuliert.</p>
+            <p style="margin-top:10px">Sag uns einfach, was du dir vorstellst — wir finden den Weg.</p>
+          </div>
+          <div class="note rv d3">
+            <div class="nk">fair &amp; planbar</div>
+            <h4>Ein Jahr Rundum-Betreuung</h4>
+            <p>Keine Einrichtungsgebühr, keine versteckten Kosten. Wir bauen, hosten und pflegen deine Seite durchgehend — der Preis bleibt, wie er ist.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABSCHLUSS / TERMIN ===== -->
+  <section class="csec final" id="termin">
+    <div class="bggrid" aria-hidden="true">
+      <div class="ghost" style="top:9%;left:5%;width:150px;--gd:12s;--gdl:0s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+      <div class="ghost" style="top:18%;right:7%;width:124px;--gd:13s;--gdl:2.5s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+      <div class="ghost" style="bottom:15%;left:9%;width:132px;--gd:11s;--gdl:4s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+      <div class="ghost" style="bottom:22%;right:10%;width:158px;--gd:14s;--gdl:6s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+      <div class="ghost" style="top:47%;left:2%;width:112px;--gd:12.5s;--gdl:7.5s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+      <div class="ghost" style="top:41%;right:2%;width:120px;--gd:13.5s;--gdl:3.5s"><div class="gd"><i></i><i></i><i></i></div><div class="gw">Aufgetischt.</div></div>
+    </div>
+    <div class="wrap">
+      <div class="eyebrow rv">dein Tisch ist gedeckt</div>
+      <div class="brandmark rv d1">
+        <span class="bwm">Aufgetischt<span class="per">.</span></span>
+      </div>
+      <div class="fclaim rv d2">Wir tischen auf. Du bist Gastgeber.</div>
+
+      <div class="booking rv d2">
+        <div id="my-cal-inline-30min"></div>
+      </div>
+      <div class="bkfine rv" style="text-align:center;margin-top:18px;color:rgba(251,246,234,.6)">unverbindlich · kostenloses Erstgespräch, kein Risiko</div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="ft-wrap">
+      <div class="ft-top">
+        <div class="ft-brand">
+          <div class="ft-word">Aufgetischt<span>.</span></div>
+          <p class="ft-tag">Websites für dein Lokal. Ein Produkt von <a href="https://venturini.codes" target="_blank" rel="noopener">venturini.codes</a>.</p>
+        </div>
+        <div class="ft-legal">
+          <details class="ft-acc">
+            <summary>Impressum</summary>
+            <div class="ft-body">
+              <p>Thomas Venturini<br>Bertlgasse 3 Top 25<br>1210 Wien, Österreich</p>
+              <p>Tel.: 0676 761 941 421<br>E-Mail: <a href="mailto:thomas@venturini.codes">thomas@venturini.codes</a></p>
+              <p>UID-Nummer: ATU79505803</p>
+              <p>Plattform der EU-Kommission zur Online-Streitbeilegung: <a href="https://ec.europa.eu/odr" target="_blank" rel="noopener">ec.europa.eu/odr</a></p>
+              <p>Wir sind zur Teilnahme an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle weder verpflichtet noch bereit.</p>
+            </div>
+          </details>
+          <details class="ft-acc">
+            <summary>Datenschutz</summary>
+            <div class="ft-body">
+              <p>Diese Website wird von venturini.codes betrieben. Der Schutz deiner persönlichen Daten ist uns ein besonderes Anliegen.</p>
+              <p><strong>Verantwortlicher:</strong><br>Thomas Venturini, Bertlgasse 3 Top 25, 1210 Wien<br><a href="mailto:thomas@venturini.codes">thomas@venturini.codes</a></p>
+              <p><strong>Datenerhebung:</strong> Beim Besuch werden automatisch Informationen allgemeiner Natur erfasst (Server-Logfiles). Diese lassen keine Rückschlüsse auf deine Person zu.</p>
+              <p><strong>Buchungs- &amp; Kontaktformular:</strong> Deine Angaben werden zwecks Bearbeitung der Anfrage bei uns gespeichert.</p>
+              <p><strong>Cookies:</strong> Wir verwenden Cookies zur Sprachauswahl. Du kannst der Verwendung jederzeit widersprechen.</p>
+              <p><strong>Deine Rechte:</strong> Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerruf und Widerspruch. Bei Beschwerden wende dich an die Datenschutzbehörde.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="ft-bar">
+        <span>© 2026 Aufgetischt. — ein Produkt von venturini.codes</span>
+        <span class="ft-links"><a href="https://instagram.com/venturini.codes" target="_blank" rel="noopener">Instagram</a> · <a href="https://linkedin.com/company/venturini-codes" target="_blank" rel="noopener">LinkedIn</a></span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hero = document.getElementById('hero');
+  const v1 = document.getElementById('v1');
+  if(v1){ const p = v1.play(); if(p&&p.catch) p.catch(()=>{}); }
+
+  const burger=document.querySelector('.burger'), tnlinks=document.getElementById('tnlinks');
+  if(burger){ burger.addEventListener('click',()=>{ const o=tnlinks.classList.toggle('open'); burger.setAttribute('aria-expanded',o); }); }
+
+  window.addEventListener('load', ()=>{
+    setTimeout(()=>{ hero.classList.add('go'); }, 120);
+    const els = [...document.querySelectorAll('.el')];
+    els.forEach((el,i)=> setTimeout(()=>el.classList.add('show'), 500 + i*360));
+  });
+
+  /* reveals (alle .rv) */
+  const rvio = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvio.unobserve(e.target);}})},{threshold:.16});
+  document.querySelectorAll('.rv').forEach(el=>rvio.observe(el));
+
+  /* iphone lockscreen */
+  const nstream = document.getElementById('nstream');
+  if(nstream){
+    const feed=[
+      {t:'Neue Reservierung',time:'jetzt',b:'Tisch 4 · 4 Pers. · 19:30'},
+      {t:'Karte übersetzt',time:'2 Min.',b:'jetzt auf Türkisch'},
+      {t:'Event-Anmeldung',time:'5 Min.',b:'Weinabend · +2'},
+      {t:'Tisch 4 bestätigt',time:'8 Min.',b:'per SMS an den Gast'},
+      {t:'Anfrage Firmenfeier',time:'12 Min.',b:'12 Personen · Sa'},
+    ];
+    let idx=0; const MAX=3;
+    function addN(){
+      const d=feed[idx%feed.length]; idx++;
+      const el=document.createElement('div'); el.className='notif';
+      el.innerHTML=`<span class="appicon">Auf<span class="per">.</span></span><div style="flex:1;min-width:0"><div class="nt"><span>${d.t}</span><span class="ntime">${d.time}</span></div><div class="nb">${d.b}</div></div>`;
+      nstream.prepend(el);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+      if(nstream.children.length>MAX){ const last=nstream.lastElementChild; last.classList.add('leave'); setTimeout(()=>{ if(last.parentNode) last.remove(); },450); }
+    }
+    if(reduce){ for(let i=0;i<3;i++) addN(); }
+    else{
+      const io2=new IntersectionObserver((es)=>{es.forEach(e=>{ if(e.isIntersecting){ let t=300; [0,1,2].forEach(()=>{setTimeout(addN,t);t+=650;}); io2.disconnect(); } });},{threshold:.3});
+      io2.observe(document.getElementById('wild'));
+    }
+  }
+
+  /* hero video pause offscreen + magnet */
+  const touch = window.matchMedia('(hover:none),(pointer:coarse)').matches;
+  if(hero){
+    const vio = new IntersectionObserver((es)=>{es.forEach(e=>{ if(v1 && !e.isIntersecting){ v1.pause(); } });},{threshold:.02});
+    vio.observe(hero);
+  }
+  if(!reduce && !touch){
+    const bg = document.getElementById('bg'), panel = document.getElementById('panel');
+    const els = [...document.querySelectorAll('.el')].map(el=>({el, par:el.querySelector('.par')}));
+    const wild = document.querySelector('.wild'), wimg = wild&&wild.querySelector('.simg'), wpan = wild&&wild.querySelector('.wpanel'), wphone = wild&&wild.querySelector('.iphone');
+    let mx = -9999, my = -9999, ticking = false;
+    const R = 130, MAXPULL = 7;
+    function bgpanel(){ const y = scrollY; bg.style.transform = `scale(1.06) translateY(${y*0.16}px)`; panel.style.transform = `translateY(${y*-0.06}px)`; }
+    function wildParallax(){ if(!wild) return; const vh = window.innerHeight; const r = wild.getBoundingClientRect(); let prog = (r.top + r.height/2 - vh/2)/vh; prog = Math.max(-1.2, Math.min(1.2, prog)); if(wimg) wimg.style.transform = `scale(1.14) translateY(${prog*-46}px)`; if(wpan) wpan.style.transform = `translateY(${prog*24}px)`; if(wphone) wphone.style.transform = `translateY(${prog*-34}px)`; }
+    function magnet(){
+      els.forEach(o=>{
+        const r = o.el.getBoundingClientRect();
+        const cx = r.left + r.width/2, cy = r.top + r.height/2;
+        const dx = mx - cx, dy = my - cy;
+        const dist = Math.hypot(dx,dy) || 1;
+        const pull = Math.max(0, 1 - dist/R);
+        const f = pull*pull*MAXPULL;
+        o.par.style.transform = `translate(${dx/dist*f}px, ${dy/dist*f}px)`;
+      });
+    }
+    window.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(()=>{ bgpanel(); wildParallax(); ticking = false; }); } }, {passive:true});
+    wildParallax();
+    let mt=false; window.addEventListener('mousemove', e=>{ mx = e.clientX; my = e.clientY; if(!mt){ mt=true; requestAnimationFrame(()=>{ magnet(); mt=false; }); } });
+  }
+
+  /* BEISPIEL: konfigurator + übersetzung + tischplan */
+  const showcase = document.getElementById('showcase');
+  if(showcase){
+    const themes = {
+      wein:{'--acc':'#7c2230','--acc-ink':'#FFF8EE','--paper':'#FFFDF7','--ink':'#221A0F'},
+      wacholder:{'--acc':'#1A3A5E','--acc-ink':'#FBF6EA','--paper':'#FFFDF7','--ink':'#221A0F'},
+      lorbeer:{'--acc':'#1A4A36','--acc-ink':'#FBF6EA','--paper':'#FFFDF7','--ink':'#221A0F'},
+      senf:{'--acc':'#B4791A','--acc-ink':'#FFF8EE','--paper':'#FFFDF7','--ink':'#221A0F'},
+      nacht:{'--acc':'#DA9A2B','--acc-ink':'#20271C','--paper':'#242018','--ink':'#F4ECDA'}
+    };
+    const fonts = {
+      klassisch:{'--fdisp':"'Playfair Display',serif",'--fbody':"'Hanken Grotesk',sans-serif"},
+      modern:{'--fdisp':"'Bricolage Grotesque',sans-serif",'--fbody':"'Hanken Grotesk',sans-serif"},
+      schlicht:{'--fdisp':"'Archivo',sans-serif",'--fbody':"'Archivo',sans-serif"}
+    };
+    const apply=(map)=>{ for(const k in map) showcase.style.setProperty(k, map[k]); };
+    document.querySelectorAll('.sw').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('.sw').forEach(x=>x.classList.remove('active')); b.classList.add('active'); apply(themes[b.dataset.theme]);
+    }));
+    document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); apply(fonts[b.dataset.font]);
+    }));
+    document.querySelectorAll('.lang b').forEach(b=>b.addEventListener('click',()=>{
+      const card=b.closest('.fcard'); const lang=b.dataset.lang;
+      card.querySelectorAll('.lang b').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      card.querySelectorAll('.t').forEach(el=>{ if(el.dataset[lang]) el.textContent = el.dataset[lang]; });
+    }));
+    const floor=document.getElementById('floor');
+    if(floor){ floor.addEventListener('click',e=>{
+      const t=e.target.closest('.ptbl'); if(!t||t.classList.contains('pbusy'))return;
+      floor.querySelectorAll('.ptbl').forEach(x=>x.classList.remove('psel'));
+      t.classList.remove('pfree'); t.classList.add('psel');
+    }); }
+  }
+
+  /* Terminbuchung läuft über das cal.com-Embed (Script am Seitenende) */
+
+  /* Aufgetischt.-Punkt: einmal beim Erscheinen + bei Cursor-Nähe hüpfen */
+  (function(){
+    const bm=document.querySelector('.brandmark'), dot=document.querySelector('.bwm .per');
+    if(!bm||!dot||reduce) return;
+    let busy=false;
+    function hop(){ if(busy)return; busy=true; dot.style.animation='none'; void dot.offsetWidth; dot.style.animation='hop 1s cubic-bezier(.25,.1,.3,1)'; }
+    dot.addEventListener('animationend',()=>{ dot.style.animation='none'; busy=false; });
+    const io=new IntersectionObserver((es)=>{es.forEach(e=>{ if(e.isIntersecting){ setTimeout(hop,600); io.disconnect(); } });},{threshold:.6});
+    io.observe(bm);
+    let inside=false; const R=140;
+    window.addEventListener('mousemove',(e)=>{
+      const r=dot.getBoundingClientRect(); if(!r.width) return;
+      const d=Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2));
+      if(d<R){ if(!inside){ inside=true; hop(); } } else inside=false;
+    },{passive:true});
+  })();
+
+  /* Feature-Anfrage-Formular → Web3Forms */
+  const ideaform=document.getElementById('ideaform');
+  if(ideaform){
+    const note=document.getElementById('ideanote');
+    ideaform.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const btn=ideaform.querySelector('button');
+      const key=ideaform.querySelector('[name=access_key]').value;
+      if(/EINTRAGEN/.test(key)){ note.textContent='⚠ Formular noch nicht verbunden — bitte den Web3Forms-Key eintragen.'; return; }
+      const orig=btn.textContent; btn.disabled=true; btn.textContent='Wird gesendet…'; note.textContent='';
+      try{
+        const res=await fetch(ideaform.action,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(ideaform)});
+        const data=await res.json();
+        if(data.success){ ideaform.reset(); note.textContent='Danke! Deine Idee ist bei uns angekommen — wir melden uns.'; }
+        else{ note.textContent='Das hat leider nicht geklappt. Schreib uns direkt an thomas@venturini.codes.'; }
+      }catch(_){ note.textContent='Netzwerkfehler. Schreib uns direkt an thomas@venturini.codes.'; }
+      btn.disabled=false; btn.textContent=orig;
+    });
+  }
+</script>
+
+<!-- Cal.com inline embed -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", "30min", {origin:"https://app.cal.com"});
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+  Cal.ns["30min"]("inline", {
+    elementOrSelector:"#my-cal-inline-30min",
+    config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"light"},
+    calLink: "nico-stangl-n4lmto/30min",
+  });
+  Cal.ns["30min"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#DA9A2B"},"dark":{"cal-brand":"#DA9A2B"}},"hideEventTypeDetails":true,"layout":"month_view"});
+</script>
+</body>
+</html>
